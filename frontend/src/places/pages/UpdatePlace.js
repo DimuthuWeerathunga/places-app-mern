@@ -77,9 +77,9 @@ const UpdatePlace = () => {
     }
   }, [setFormData, identifiedPlace]);
 
-  const placeUpdateSubmitHandler = (event) => {
-    event.preventDefault();
-  };
+  // const placeUpdateSubmitHandler = (event) => {
+  //   event.preventDefault();
+  // };
 
   if (!identifiedPlace) {
     return (
