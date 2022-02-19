@@ -16,7 +16,7 @@ import './PlaceForm.css';
 
 function NewPlace() {
   const auth = useContext(AuthContext);
-  const { isLoading, error, sendRequest, clearEror } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -59,7 +59,7 @@ function NewPlace() {
 
   return (
     <>
-      <ErrorModal error={error} onClear={clearEror}></ErrorModal>
+      <ErrorModal error={error} onClear={clearError}></ErrorModal>
       <form className='place-form' onSubmit={placeSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay></LoadingSpinner>}
         <Input

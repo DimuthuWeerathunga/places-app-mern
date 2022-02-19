@@ -5,6 +5,7 @@ import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -18,7 +19,7 @@ import './Auth.css';
 const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const { isLoading, error, sendRequest, clearEror } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -40,6 +41,7 @@ const Auth = () => {
         {
           ...formState.inputs,
           name: undefined,
+          image: undefined,
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -49,6 +51,10 @@ const Auth = () => {
           ...formState.inputs,
           name: {
             value: '',
+            isValid: false,
+          },
+          image: {
+            value: null,
             isValid: false,
           },
         },
@@ -77,19 +83,15 @@ const Auth = () => {
       } catch (error) {}
     } else {
       try {
+        const formData = new FormData();
+        formData.append('email', formState.inputs.email.value);
+        formData.append('name', formState.inputs.name.value);
+        formData.append('password', formState.inputs.password.value);
+        formData.append('image', formState.inputs.image.value);
         const responseData = await sendRequest(
           'http://localhost:8000/api/users/signup',
           'POST',
-          JSON.stringify(
-            {
-              name: formState.inputs.name.value,
-              email: formState.inputs.email.value,
-              password: formState.inputs.password.value,
-            },
-            {
-              'Content-Type': 'application/json',
-            }
-          )
+          formData
         );
 
         auth.login(responseData.user.id);
@@ -99,7 +101,7 @@ const Auth = () => {
 
   return (
     <React.Fragment>
-      <ErrorModal error={error} onClear={clearEror}></ErrorModal>
+      <ErrorModal error={error} onClear={clearError}></ErrorModal>
       <Card className='authentication'>
         {isLoading && <LoadingSpinner asOverlay></LoadingSpinner>}
         <h2>Login Required</h2>
@@ -116,6 +118,9 @@ const Auth = () => {
               onInput={inputHandler}
             ></Input>
           )}
+          {!isLoginMode && (
+            <ImageUpload center id='image' onInput={inputHandler}></ImageUpload>
+          )}
           <Input
             element='input'
             type='email'
@@ -130,7 +135,7 @@ const Auth = () => {
             type='password'
             label='Password'
             id='password'
-            validators={[VALIDATOR_MINLENGTH(5)]}
+            validators={[VALIDATOR_MINLENGTH(6)]}
             errorText='Please enter a valid password, at least 5 characters.'
             onInput={inputHandler}
           ></Input>

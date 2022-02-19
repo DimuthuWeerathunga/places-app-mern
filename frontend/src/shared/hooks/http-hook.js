@@ -37,7 +37,7 @@ export const useHttpClient = () => {
     []
   );
 
-  const clearEror = () => {
+  const clearError = () => {
     setError(null);
   };
 
@@ -47,5 +47,5 @@ export const useHttpClient = () => {
     };
   }, []);
 
-  return { isLoading, error, sendRequest, clearEror };
+  return { isLoading, error, sendRequest, clearError };
 };

@@ -16,7 +16,7 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 // ];
 
 function Users() {
-  const { isLoading, error, sendRequest, clearEror } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [loadedUsers, setLoadedUsers] = useState();
 
   useEffect(() => {
@@ -34,7 +34,7 @@ function Users() {
 
   return (
     <>
-      <ErrorModal error={error} onClear={clearEror}></ErrorModal>
+      <ErrorModal error={error} onClear={clearError}></ErrorModal>
       {isLoading && (
         <div className='center'>
           <LoadingSpinner></LoadingSpinner>
