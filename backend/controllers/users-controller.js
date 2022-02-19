@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
@@ -80,10 +79,8 @@ exports.login = async (req, res, next) => {
     const error = new HttpError('Login failed please try again', 422);
     return next(error);
   }
-  res
-    .status(200)
-    .json({
-      message: 'Logged in!',
-      user: existingUser.toObject({ getters: true }),
-    });
+  res.status(200).json({
+    message: 'Logged in!',
+    user: existingUser.toObject({ getters: true }),
+  });
 };
