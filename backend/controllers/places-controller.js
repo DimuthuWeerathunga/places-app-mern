@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 
@@ -5,33 +6,6 @@ const HttpError = require('../models/http-error');
 const getCoordsForAddress = require('../util/location');
 const Place = require('../models/place');
 const User = require('../models/user');
-
-let DUMMY_PLACES = [
-  {
-    title: 'Empire state building',
-    description: 'One of the most famous sky scrapers in the world',
-    imageUrl:
-      'https://www.thoughtco.com/thmb/Vc_NzNjjvF7WufBlHVKnRPNeFmo=/2000x1333/filters:fill(auto,1)/187410874_HighRes-resize-56a48d293df78cf77282efa6.jpg',
-    address: '20 W 34th St, New York, NY 10001, United States',
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584,
-    },
-    creator: 'u1',
-  },
-  {
-    title: 'Empire state building',
-    description: 'One of the most famous sky scrapers in the world',
-    imageUrl:
-      'https://www.thoughtco.com/thmb/Vc_NzNjjvF7WufBlHVKnRPNeFmo=/2000x1333/filters:fill(auto,1)/187410874_HighRes-resize-56a48d293df78cf77282efa6.jpg',
-    address: '20 W 34th St, New York, NY 10001, United States',
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584,
-    },
-    creator: 'u2',
-  },
-];
 
 exports.getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid;
@@ -105,8 +79,7 @@ exports.createPlace = async (req, res, next) => {
     description,
     address,
     location: coordinates,
-    image:
-      'https://www.thoughtco.com/thmb/Vc_NzNjjvF7WufBlHVKnRPNeFmo=/2000x1333/filters:fill(auto,1)/187410874_HighRes-resize-56a48d293df78cf77282efa6.jpg',
+    image: req.file.path,
     creator,
   });
 
@@ -202,6 +175,8 @@ exports.deletePlace = async (req, res, next) => {
     next(error);
   }
 
+  const imagePath = place.image;
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -215,5 +190,6 @@ exports.deletePlace = async (req, res, next) => {
       500
     );
   }
+  fs.unlink(imagePath, () => {});
   res.status(200).json({ message: 'Deleted place' });
 };
