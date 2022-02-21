@@ -79,7 +79,7 @@ exports.signup = async (req, res, next) => {
   try {
     token = jwt.sign(
       { userId: createdUser.id, email: createdUser.email },
-      'supersecret_dont_share',
+      process.env.JWT_KEY,
       { expiresIn: '1h' }
     );
   } catch (err) {
@@ -103,7 +103,10 @@ exports.login = async (req, res, next) => {
     return next(error);
   }
   if (!existingUser) {
-    const error = new HttpError('Login failed please try again', 401);
+    const error = new HttpError(
+      'Invalid credentials could not log you in',
+      403
+    );
     return next(error);
   }
 
@@ -122,7 +125,7 @@ exports.login = async (req, res, next) => {
   try {
     token = jwt.sign(
       { userId: existingUser.id, email: existingUser.email },
-      'supersecret_dont_share',
+      process.env.JWT_KEY,
       { expiresIn: '1h' }
     );
   } catch (err) {

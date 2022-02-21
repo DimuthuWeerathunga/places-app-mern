@@ -52,9 +52,11 @@ exports.getPlacesByUserId = async (req, res, next) => {
       new HttpError('Could not find places for the provided user id', 404)
     );
   }
-
+  // places = JSON.stringify(places);
+  // console.log(places);
   res.json({
     places: places.map((place) => place.toObject({ getters: true })),
+    // places,
   });
 };
 
@@ -65,7 +67,7 @@ exports.createPlace = async (req, res, next) => {
     next(new HttpError('Invalid input passed, please check your data', 422));
   }
 
-  const { title, description, address, creator } = req.body;
+  const { title, description, address } = req.body;
 
   let coordinates;
   try {
@@ -80,12 +82,12 @@ exports.createPlace = async (req, res, next) => {
     address,
     location: coordinates,
     image: req.file.path,
-    creator,
+    creator: req.userData.userId,
   });
 
   let user;
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req.userData.userId);
   } catch (err) {
     const error = new HttpError('Creating place failed', 500);
     return next(error);
