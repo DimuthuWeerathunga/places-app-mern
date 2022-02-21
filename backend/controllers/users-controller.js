@@ -129,7 +129,7 @@ exports.login = async (req, res, next) => {
     const error = new HttpError('Logging in failed, please try again', 500);
     return next(error);
   }
-
+  // console.log('a user has logged in');
   res.status(200).json({
     userId: existingUser.id,
     email: existingUser.email,
