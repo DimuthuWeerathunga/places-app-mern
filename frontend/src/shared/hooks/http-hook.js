@@ -18,6 +18,7 @@ export const useHttpClient = () => {
           headers,
           signal: httpAbortCtrl.signal,
         });
+        // console.log('response', response);
         const responseData = await response.json();
 
         activeHttpRequests.current = activeHttpRequests.current.filter(
@@ -27,6 +28,7 @@ export const useHttpClient = () => {
           throw new Error(responseData.message);
         }
         setIsLoading(false);
+        // console.log('responseData', responseData);
         return responseData;
       } catch (error) {
         setError(error.message);
