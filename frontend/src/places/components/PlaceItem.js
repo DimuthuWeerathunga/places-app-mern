@@ -35,6 +35,19 @@ const PlaceItem = (props) => {
       props.onDelete(props.id);
     } catch (error) {}
   };
+  let description = <p>{props.description}</p>;
+
+  if (props.description.includes('blockquote')) {
+    // const embeddedCode = props.description.split('</blockquote>');
+    // const embeddedCodeBlockQuote = embeddedCode[0] + '</blockquote>';
+    // const embeddedCodeScript = embeddedCode[1];
+    // const embeddedHtmlEl = document.createElement('div');
+    // embeddedHtmlEl.innerHTML = embeddedCodeBlockQuote;
+    // description = embeddedHtmlEl;
+    description = (
+      <div dangerouslySetInnerHTML={{ __html: props.description }}></div>
+    );
+  }
 
   return (
     <>
@@ -81,7 +94,7 @@ const PlaceItem = (props) => {
           <div className='place-item__info'>
             <h2>{props.title}</h2>
             <h3>{props.address}</h3>
-            <p>{props.description}</p>
+            {description}
           </div>
           <div className='place-item__actions'>
             <Button inverse onClick={openMapHandler}>

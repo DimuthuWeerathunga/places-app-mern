@@ -80,6 +80,7 @@ const Auth = () => {
         );
 
         auth.login(responseData.userId, responseData.token);
+        console.log(responseData.token);
       } catch (error) {}
     } else {
       try {
