@@ -80,7 +80,7 @@ const PlaceItem = (props) => {
           </>
         }
       >
-        <p>Do you want to procede and delte this place</p>
+        <p>Do you want to procede and delete this place</p>
       </Modal>
       <li className='place-item'>
         <Card className='place-item__content'>

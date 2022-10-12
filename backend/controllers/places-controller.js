@@ -27,9 +27,6 @@ exports.getPlaceById = async (req, res, next) => {
     );
   }
   place = place.toObject({ getters: true });
-  place.addedOnServer = 'this post is added by the server';
-
-  console.log('Converted Object - ', place);
 
   res.json({ place });
 };

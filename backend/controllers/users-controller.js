@@ -28,6 +28,8 @@ exports.signup = async (req, res, next) => {
   }
 
   const { name, email, password } = req.body;
+  console.log(req.body);
+  return res.status(200).json({ message: 'success' });
 
   let existingUser;
   try {
@@ -120,6 +122,12 @@ exports.login = async (req, res, next) => {
       500
     );
     return next(error);
+  }
+
+  if (!isValidPassword) {
+    return next(
+      new HttpError('Credentials are incorrect please try again', 403)
+    );
   }
 
   let token;
